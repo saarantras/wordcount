@@ -14,7 +14,7 @@ console = Console()
 @click.command()
 @click.argument(
     "directory",
-    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    type=click.Path(exists=True, file_okay=False, resolve_path=True, path_type=Path),
 )
 @click.option(
     "--corpus", "-c",
