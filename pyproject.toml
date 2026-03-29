@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wordcount"
+version = "0.1.0"
+description = "Word frequency outlier analysis for markdown corpora"
+requires-python = ">=3.10"
+dependencies = [
+    "spacy>=3.7",
+    "markdown-it-py>=3.0",
+    "rich>=13.7",
+    "click>=8.1",
+    "nltk>=3.8",
+    "wordfreq>=3.0.2",
+    "platformdirs>=4.0",
+]
+
+[project.scripts]
+wordcount = "wordcount.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["wordcount"]
