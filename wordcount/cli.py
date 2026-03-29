@@ -11,13 +11,7 @@ from rich.console import Console
 console = Console()
 
 
-@click.group()
-def main() -> None:
-    """Analyse word frequency outliers in a markdown corpus."""
-    pass
-
-
-@main.command()
+@click.command()
 @click.argument(
     "directory",
     type=click.Path(exists=True, file_okay=False, path_type=Path),
@@ -62,7 +56,7 @@ def main() -> None:
     default=False,
     help="Rebuild Brown reference corpus cache from scratch.",
 )
-def analyze(
+def main(
     directory: Path,
     corpus: tuple[str, ...],
     top: int,
@@ -71,7 +65,18 @@ def analyze(
     include_stopwords: bool,
     no_cache: bool,
 ) -> None:
-    """Analyse word frequency outliers in DIRECTORY (recursed for .md files)."""
+    """Analyse word frequency outliers in a directory of markdown files.
+
+    DIRECTORY is searched recursively for .md files. Each word is lemmatised
+    and POS-tagged; its frequency is compared against one or more reference
+    corpora and ranked outliers are shown per part of speech.
+
+    Reference corpora: literary and newspaper use NLTK Brown corpus genre
+    subsets; modern uses wordfreq aggregate frequencies.
+
+    Scores are signed sqrt(G²) — positive means over-represented, negative
+    means under-represented. Values below ±1.96σ (p<0.05) are dimmed.
+    """
     from wordcount.parser import collect_texts
     from wordcount.analyzer import analyze_corpus
     from wordcount.corpora import get_brown_frequencies, RefCorpus
